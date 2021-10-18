@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import routes from '.';
 import NavBar from '../components/NavBar';
 
@@ -8,11 +9,33 @@ type RenderComponentProps = {
   props: React.ComponentProps<any>
 };
 
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(1),
+  marginTop: theme.spacing(6),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: 0,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: '250px',
+  }),
+}));
+
 const RenderComponent = ({ component: Component, props }: RenderComponentProps) => (
   <>
     <NavBar />
-    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-    <Component {...props} />
+    <Main open>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <Component {...props} />
+    </Main>
   </>
 );
 

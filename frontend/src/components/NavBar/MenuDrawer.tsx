@@ -14,6 +14,13 @@ const MenuDrawer = ({ open, onClose, onOpen }: MenuDrawerProps) => {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const drawerChildren = (
+    <>
+      <Toolbar variant="dense" />
+      <MenuItems />
+    </>
+  );
+
   return (
     <>
       {isExtraSmallWidth ? (
@@ -23,8 +30,7 @@ const MenuDrawer = ({ open, onClose, onOpen }: MenuDrawerProps) => {
           onClose={onClose}
           onOpen={onOpen}
         >
-          <Toolbar />
-          <MenuItems />
+          {drawerChildren}
         </SwipeableDrawer>
       ) : (
         <Drawer
@@ -32,8 +38,7 @@ const MenuDrawer = ({ open, onClose, onOpen }: MenuDrawerProps) => {
           open={open}
           variant="persistent"
         >
-          <Toolbar />
-          <MenuItems />
+          {drawerChildren}
         </Drawer>
       )}
     </>
