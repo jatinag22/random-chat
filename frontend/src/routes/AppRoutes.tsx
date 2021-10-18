@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import routes from '.';
 import NavBar from '../components/NavBar';
+import { useAppSelector } from '../redux/hooks';
 
 type RenderComponentProps = {
   component: React.ComponentType,
@@ -20,7 +21,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: 0,
-  ...(open && {
+  [theme.breakpoints.up('sm')]: (open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -29,15 +30,19 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   }),
 }));
 
-const RenderComponent = ({ component: Component, props }: RenderComponentProps) => (
-  <>
-    <NavBar />
-    <Main open>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <Component {...props} />
-    </Main>
-  </>
-);
+const RenderComponent = ({ component: Component, props }: RenderComponentProps) => {
+  const { isMenuDrawerOpen } = useAppSelector((state) => state.app);
+
+  return (
+    <>
+      <NavBar />
+      <Main open={isMenuDrawerOpen}>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Component {...props} />
+      </Main>
+    </>
+  );
+};
 
 const AppRoutes = () => (
   <Switch>

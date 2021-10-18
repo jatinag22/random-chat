@@ -6,7 +6,7 @@ import { Menu as MenuIcon, AccountCircle as UserIcon, ArrowBack as BackIcon } fr
 
 type TopBarProps = {
   isDrawerOpen: boolean,
-  toggleDrawer: () => void,
+  toggleDrawer: (open?: string) => void,
 };
 
 const TopBar = ({ isDrawerOpen, toggleDrawer }: TopBarProps) => {
@@ -25,7 +25,7 @@ const TopBar = ({ isDrawerOpen, toggleDrawer }: TopBarProps) => {
                 color="inherit"
                 aria-label="menu"
                 sx={{ mr: 2 }}
-                onClick={toggleDrawer}
+                onClick={() => toggleDrawer()}
               >
                 {isDrawerOpen && isExtraSmallWidth ? <BackIcon /> : <MenuIcon />}
               </IconButton>

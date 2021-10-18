@@ -1,24 +1,29 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { toggleMenuDrawer } from '../../redux/reducers/actions';
 import MenuDrawer from './MenuDrawer';
 import TopBar from './TopBar';
 
 const NavBar = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { isMenuDrawerOpen } = useAppSelector((state) => state.app);
+  const dispatch = useAppDispatch();
 
-  const toggleDrawer = useCallback(() => {
-    setIsDrawerOpen((state) => !state);
+  const toggleDrawer = useCallback((open) => {
+    dispatch(toggleMenuDrawer({
+      open,
+    }));
   }, []);
 
   return (
     <>
       <TopBar
-        isDrawerOpen={isDrawerOpen}
+        isDrawerOpen={isMenuDrawerOpen}
         toggleDrawer={toggleDrawer}
       />
       <MenuDrawer
-        open={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        onOpen={() => setIsDrawerOpen(true)}
+        open={isMenuDrawerOpen}
+        onClose={() => toggleDrawer(false)}
+        onOpen={() => toggleDrawer(true)}
       />
     </>
   );
