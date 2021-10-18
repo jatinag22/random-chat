@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import routes from '.';
+import NavBar from '../components/NavBar';
 
 type RenderComponentProps = {
   component: React.ComponentType,
@@ -8,8 +9,11 @@ type RenderComponentProps = {
 };
 
 const RenderComponent = ({ component: Component, props }: RenderComponentProps) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <Component {...props} />
+  <>
+    <NavBar />
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+    <Component {...props} />
+  </>
 );
 
 const AppRoutes = () => (
