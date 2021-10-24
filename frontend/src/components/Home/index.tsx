@@ -1,7 +1,9 @@
+import { Box } from '@mui/system';
+
 const Home = () => (
-  <div>
+  <Box>
     Home
-  </div>
+  </Box>
 );
 
 export default Home;
