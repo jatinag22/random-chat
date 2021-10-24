@@ -7,15 +7,16 @@ import { Menu as MenuIcon, AccountCircle as UserIcon, ArrowBack as BackIcon } fr
 type TopBarProps = {
   isDrawerOpen: boolean,
   toggleDrawer: (open?: string) => void,
+  handleOpenLoginModal: () => void,
 };
 
-const TopBar = ({ isDrawerOpen, toggleDrawer }: TopBarProps) => {
+const TopBar = ({ isDrawerOpen, toggleDrawer, handleOpenLoginModal }: TopBarProps) => {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{ zIndex: 999999 }}>
+      <AppBar position="fixed">
         <Toolbar variant="dense">
           <Grid container alignItems="center" spacing={2}>
             <Grid item xs={2} sm={1}>
@@ -45,10 +46,10 @@ const TopBar = ({ isDrawerOpen, toggleDrawer }: TopBarProps) => {
               sx={{ display: { xs: 'none', sm: 'flex' } }}
             >
               <Grid item>
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" onClick={handleOpenLoginModal}>Login</Button>
               </Grid>
               <Grid item>
-                <Button color="inherit">Sign Up</Button>
+                <Button color="inherit" onClick={handleOpenLoginModal}>Sign Up</Button>
               </Grid>
             </Grid>
             <Grid item xs={2} sx={{ display: { xs: 'flex', sm: 'none' } }}>
@@ -57,6 +58,7 @@ const TopBar = ({ isDrawerOpen, toggleDrawer }: TopBarProps) => {
                 edge="end"
                 color="inherit"
                 aria-label="user"
+                onClick={handleOpenLoginModal}
               >
                 <UserIcon />
               </IconButton>

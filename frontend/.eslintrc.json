@@ -24,6 +24,7 @@
     "rules": {
       "react/jsx-filename-extension": [2, { "extensions": [".tsx"] }],
       "react/react-in-jsx-scope": "off",
-      "max-len": [1, 120, 2, { "ignoreComments": true }]
+      "max-len": [1, 120, 2, { "ignoreComments": true }],
+      "@typescript-eslint/no-unused-vars": "warn"
     }
 }
