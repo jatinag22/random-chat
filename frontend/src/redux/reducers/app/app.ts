@@ -22,17 +22,11 @@ const {
 
     toggleMenuDrawer: (state, action) => ({
       ...state,
-      isMenuDrawerOpen: action?.payload?.open !== undefined ? action.payload.open : !state.isMenuDrawerOpen,
+      isMenuDrawerOpen: action.payload.open ?? !state.isMenuDrawerOpen,
     }),
 
     toggleTheme: (state, action) => {
-      let newTheme;
-
-      if (action?.payload?.mode !== undefined) {
-        newTheme = action.payload.mode;
-      } else {
-        newTheme = state.theme === 'light' ? 'dark' : 'light';
-      }
+      const newTheme = action.payload.mode ?? state.theme === 'light' ? 'dark' : 'light';
 
       localStorage.setItem('theme', newTheme);
 

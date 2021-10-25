@@ -4,10 +4,12 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { Menu as MenuIcon, AccountCircle as UserIcon, ArrowBack as BackIcon } from '@mui/icons-material';
 
+type LoginModalType = 'login' | 'signup';
+
 type TopBarProps = {
   isDrawerOpen: boolean,
   toggleDrawer: (open?: string) => void,
-  handleOpenLoginModal: () => void,
+  handleOpenLoginModal: (type?: LoginModalType) => void,
 };
 
 const TopBar = ({ isDrawerOpen, toggleDrawer, handleOpenLoginModal }: TopBarProps) => {
@@ -46,10 +48,10 @@ const TopBar = ({ isDrawerOpen, toggleDrawer, handleOpenLoginModal }: TopBarProp
               sx={{ display: { xs: 'none', sm: 'flex' } }}
             >
               <Grid item>
-                <Button color="inherit" onClick={handleOpenLoginModal}>Login</Button>
+                <Button color="inherit" onClick={() => handleOpenLoginModal('login')}>Login</Button>
               </Grid>
               <Grid item>
-                <Button color="inherit" onClick={handleOpenLoginModal}>Sign Up</Button>
+                <Button color="inherit" onClick={() => handleOpenLoginModal('signup')}>Sign Up</Button>
               </Grid>
             </Grid>
             <Grid item xs={2} sx={{ display: { xs: 'flex', sm: 'none' } }}>
@@ -58,7 +60,7 @@ const TopBar = ({ isDrawerOpen, toggleDrawer, handleOpenLoginModal }: TopBarProp
                 edge="end"
                 color="inherit"
                 aria-label="user"
-                onClick={handleOpenLoginModal}
+                onClick={() => handleOpenLoginModal('login')}
               >
                 <UserIcon />
               </IconButton>
