@@ -9,11 +9,11 @@ import {
   useMediaQuery, useTheme,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import {
-  ChangeEvent, useCallback, useEffect, useState,
-} from 'react';
-
-type LoginModalType = 'login' | 'signup';
+import { useCallback, useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import Joi from 'joi';
+import { LoginModalType } from './types';
 
 type LoginProps = {
   open: boolean,
@@ -21,27 +21,56 @@ type LoginProps = {
   type?: LoginModalType,
 };
 
-type FormState = {
+type FormValues = {
   username: string,
   password: string,
   confirmPassword: string,
   rememberMe: boolean,
+};
+
+type FormState = {
   showPassword: boolean,
   showConfirmPassword: boolean,
-  forgotPassword: boolean,
   type: LoginModalType,
 };
 
-const initialFormState: FormState = {
+const initialFormValues: FormValues = {
   username: '',
   password: '',
   confirmPassword: '',
   rememberMe: false,
+};
+
+const initialFormState: FormState = {
   showPassword: false,
   showConfirmPassword: false,
-  forgotPassword: false,
   type: 'login',
 };
+
+const schema = Joi.object({
+  username: Joi.string()
+    .pattern(/^[a-zA-Z0-9._]*$/)
+    .message('{#key} can contain only letters, numbers, . and _')
+    .pattern(/^(?=.*[A-Z])|(?=.*[a-z]).$/)
+    .message('{#key} must contain at least one letter')
+    .min(4)
+    .max(15)
+    .required(),
+  password: Joi.string()
+    .pattern(/^(?=.*[A-Z])(?=.*[^\dA-Za-z])(?=.*[0-9])(?=.*[a-z]).*$/)
+    .message('{#key} must contain a mixture of uppercase and lowercase letters, numbers and special characters')
+    .min(8)
+    .max(30)
+    .required(),
+  confirmPassword: Joi.ref('password'),
+}).with('password', 'confirmPassword')
+  .messages({
+    'string.empty': '{#key} is required',
+    'string.min': '{#key} must have a minimum length of {#limit}',
+    'string.max': '{#key} must have a maximum length of {#limit}',
+    'any.required': '{#key} is required',
+    'any.only': 'must be same as {#valids.0.key}',
+  });
 
 const Login = ({ open, handleClose, type }: LoginProps) => {
   const [form, setForm] = useState({ ...initialFormState, type });
@@ -50,37 +79,32 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
   const theme = useTheme();
   const isExtraSmallWidth = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const onChangeForm = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setForm((current) => ({
-      ...current,
-      [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
-    }));
-  }, []);
+  const {
+    register, formState: { errors }, handleSubmit, control, reset,
+  } = useForm<FormValues>({
+    defaultValues: initialFormValues,
+    resolver: joiResolver(schema),
+  });
 
   const togglePasswordVisibility = useCallback((e) => {
     setForm((current) => ({
       ...current,
-      [e.currentTarget.ariaLabel === 'toggle password visibility' ? 'showPassword' : 'showConfirmPassword']:
-        !current[e.currentTarget.ariaLabel === 'toggle password visibility' ? 'showPassword' : 'showConfirmPassword'],
+      [e?.currentTarget?.ariaLabel === 'toggle password visibility' ? 'showPassword' : 'showConfirmPassword']:
+        !current[e?.currentTarget?.ariaLabel === 'toggle password visibility' ? 'showPassword' : 'showConfirmPassword'],
     }));
   }, []);
 
-  const toggleForgotPassword = useCallback(() => {
-    setForm((current) => ({
-      ...current,
-      forgotPassword: !current.forgotPassword,
-    }));
-  }, []);
-
-  const toggleFormType = useCallback(() => {
-    setForm((current) => ({
+  const toggleFormType = useCallback((newType: LoginModalType) => {
+    reset();
+    setForm(() => ({
       ...initialFormState,
-      type: current.type === 'login' ? 'signup' : 'login',
+      type: newType,
     }));
   }, []);
 
-  const onSubmitForm = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  const onSubmitForm: SubmitHandler<FormState> = useCallback((data) => {
+    // eslint-disable-next-line no-console
+    console.log(data);
   }, []);
 
   const onCloseModal = useCallback(() => {
@@ -96,14 +120,22 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
   }, [type]);
 
   useEffect(() => {
-    if (form.type === 'login') {
-      setModalTitle(form.forgotPassword ? 'Reset Password' : 'Login');
-      setButtonLabel(form.forgotPassword ? 'Reset Password' : 'Login');
-    } else {
-      setModalTitle('Sign Up');
-      setButtonLabel('Sign Up');
+    switch (form.type) {
+      case 'login':
+        setModalTitle('Login');
+        setButtonLabel('Login');
+        break;
+      case 'signup':
+        setModalTitle('Sign Up');
+        setButtonLabel('Sign Up');
+        break;
+      case 'reset':
+        setModalTitle('Reset Password');
+        setButtonLabel('Reset Password');
+        break;
+      default:
     }
-  }, [form.type, form.forgotPassword]);
+  }, [form.type]);
 
   return (
     <Dialog
@@ -130,31 +162,30 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
       <DialogContent>
         <Box
           component="form"
-          onSubmit={onSubmitForm}
+          onSubmit={handleSubmit(onSubmitForm)}
+          noValidate
         >
           <TextField
-            required
             fullWidth
             autoFocus
             margin="normal"
-            name="username"
+            type="text"
             label="Username"
-            placeholder="Username"
+            placeholder="Username or Email"
             autoComplete="username"
-            value={form.username}
-            onChange={onChangeForm}
+            inputProps={{ ...register('username', { required: 'Username is required' }) }}
+            error={!!errors.username}
+            helperText={errors?.username?.message}
           />
+
           <TextField
-            required
             fullWidth
             margin="normal"
-            name="password"
             type={form.showPassword ? 'text' : 'password'}
             label="Password"
             placeholder="Password"
-            value={form.password}
-            onChange={onChangeForm}
-            sx={form.forgotPassword ? { display: 'none' } : undefined}
+            autoComplete="current-password"
+            sx={form.type === 'reset' ? { display: 'none' } : undefined}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -168,18 +199,19 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
                 </InputAdornment>
               ),
             }}
+            inputProps={{ ...register('password', { disabled: form.type === 'reset' }) }}
+            error={!!errors.password}
+            helperText={errors?.password?.message}
           />
+
           <TextField
-            required
             fullWidth
             margin="normal"
-            name="confirmPassword"
             type={form.showConfirmPassword ? 'text' : 'password'}
             label="Confirm Password"
             placeholder="Confirm Password"
-            value={form.confirmPassword}
-            onChange={onChangeForm}
-            sx={form.type === 'login' ? { display: 'none' } : undefined}
+            autoComplete="current-password"
+            sx={form.type === 'signup' ? undefined : { display: 'none' }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -193,19 +225,30 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
                 </InputAdornment>
               ),
             }}
+            inputProps={{ ...register('confirmPassword', { disabled: form.type !== 'signup' }) }}
+            error={!!errors.confirmPassword}
+            helperText={errors?.confirmPassword?.message}
           />
-          <FormControlLabel
-            label="Remember me"
-            control={(
-              <Checkbox
-                color="primary"
-                name="rememberMe"
-                checked={form.rememberMe}
-                onChange={onChangeForm}
+
+          <Controller
+            control={control}
+            name="rememberMe"
+            render={({ field: { value, onChange } }) => (
+              <FormControlLabel
+                label="Remember me"
+                control={(
+                  <Checkbox
+                    color="primary"
+                    onChange={(e) => onChange(e.target.checked)}
+                    checked={value}
+                  />
+                )}
+                sx={form.type !== 'login' ? { display: 'none' } : undefined}
+                disabled={form.type !== 'login'}
               />
             )}
-            sx={form.forgotPassword || form.type === 'signup' ? { display: 'none' } : undefined}
           />
+
           <DialogActions sx={{ flexDirection: 'column' }}>
             <Button
               type="submit"
@@ -216,18 +259,21 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
             >
               {buttonLabel}
             </Button>
+
             <Button
               fullWidth
               size="small"
-              onClick={toggleForgotPassword}
+              onClick={() => toggleFormType(form.type === 'login' ? 'reset' : 'login')}
               sx={form.type === 'signup' ? { display: 'none' } : undefined}
             >
-              {form.forgotPassword ? 'Back to Login' : 'Forgot Password?'}
+              {form.type === 'reset' ? 'Back to Login' : 'Forgot Password?'}
             </Button>
+
             <Button
               fullWidth
               size="small"
-              onClick={toggleFormType}
+              onClick={() => toggleFormType(form.type === 'login' ? 'signup' : 'login')}
+              sx={form.type === 'reset' ? { display: 'none' } : undefined}
             >
               {form.type === 'signup' ? 'Already Have an Account?' : 'Create a New Account'}
             </Button>

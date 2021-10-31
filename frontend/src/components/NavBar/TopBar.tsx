@@ -3,8 +3,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Menu as MenuIcon, AccountCircle as UserIcon, ArrowBack as BackIcon } from '@mui/icons-material';
-
-type LoginModalType = 'login' | 'signup';
+import { LoginModalType } from '../Login/types';
 
 type TopBarProps = {
   isDrawerOpen: boolean,

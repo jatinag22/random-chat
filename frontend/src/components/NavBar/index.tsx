@@ -2,10 +2,9 @@ import { useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { toggleMenuDrawer } from '../../redux/reducers/actions';
 import Login from '../Login';
+import { LoginModalType } from '../Login/types';
 import MenuDrawer from './MenuDrawer';
 import TopBar from './TopBar';
-
-type LoginModalType = 'login' | 'signup';
 
 const NavBar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
