@@ -12,8 +12,8 @@ import { Box } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import Joi from 'joi';
 import { LoginModalType } from './types';
+import { loginSchema, resetSchema, signUpSchema } from './joiSchemas';
 
 type LoginProps = {
   open: boolean,
@@ -47,32 +47,19 @@ const initialFormState: FormState = {
   type: 'login',
 };
 
-const schema = Joi.object({
-  username: Joi.string()
-    .pattern(/^[a-zA-Z0-9._]*$/)
-    .message('{#key} can contain only letters, numbers, . and _')
-    .pattern(/^(?=.*[A-Z])|(?=.*[a-z]).$/)
-    .message('{#key} must contain at least one letter')
-    .min(4)
-    .max(15)
-    .required(),
-  password: Joi.string()
-    .pattern(/^(?=.*[A-Z])(?=.*[^\dA-Za-z])(?=.*[0-9])(?=.*[a-z]).*$/)
-    .message('{#key} must contain a mixture of uppercase and lowercase letters, numbers and special characters')
-    .min(8)
-    .max(30)
-    .required(),
-  confirmPassword: Joi.ref('password'),
-}).with('password', 'confirmPassword')
-  .messages({
-    'string.empty': '{#key} is required',
-    'string.min': '{#key} must have a minimum length of {#limit}',
-    'string.max': '{#key} must have a maximum length of {#limit}',
-    'any.required': '{#key} is required',
-    'any.only': 'must be same as {#valids.0.key}',
-  });
+const getSchema = (type: LoginModalType) => {
+  switch (type) {
+    case 'login':
+      return loginSchema;
+    case 'signup':
+      return signUpSchema;
+    case 'reset':
+      return resetSchema;
+    default: return loginSchema;
+  }
+};
 
-const Login = ({ open, handleClose, type }: LoginProps) => {
+const Login = ({ open, handleClose, type = 'login' }: LoginProps) => {
   const [form, setForm] = useState({ ...initialFormState, type });
   const [modalTitle, setModalTitle] = useState('login');
   const [buttonLabel, setButtonLabel] = useState('Login');
@@ -83,7 +70,7 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
     register, formState: { errors }, handleSubmit, control, reset,
   } = useForm<FormValues>({
     defaultValues: initialFormValues,
-    resolver: joiResolver(schema),
+    resolver: joiResolver(getSchema(form.type)),
   });
 
   const togglePasswordVisibility = useCallback((e) => {
@@ -173,7 +160,7 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
             label="Username"
             placeholder="Username or Email"
             autoComplete="username"
-            inputProps={{ ...register('username', { required: 'Username is required' }) }}
+            inputProps={{ ...register('username') }}
             error={!!errors.username}
             helperText={errors?.username?.message}
           />
@@ -283,10 +270,6 @@ const Login = ({ open, handleClose, type }: LoginProps) => {
 
     </Dialog>
   );
-};
-
-Login.defaultProps = {
-  type: 'login',
 };
 
 export default Login;
