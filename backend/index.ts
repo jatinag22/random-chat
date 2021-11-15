@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 
 const app: Application = express();
-const port = 4000;
+const { PORT } = process.env;
 
 // Body parsing Middleware
 app.use(express.json());
@@ -15,8 +15,8 @@ app.get(
 );
 
 try {
-  app.listen(port, (): void => {
-    console.log(`Connected successfully on port ${port}`);
+  app.listen(PORT, (): void => {
+    console.log(`Connected successfully on port ${PORT}`);
   });
 } catch (error) {
   if (error instanceof Error) {
