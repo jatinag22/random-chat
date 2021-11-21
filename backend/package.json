@@ -2,12 +2,15 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel index.ts -d dist --extensions '.js,.ts'",
-    "start": "npm run build && node dist/index.js",
-    "dev": "nodemon index.dev.js"
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "build": "babel ./src -d dist --extensions '.ts'",
+    "start": "if [ $APP_ENV = \"production\" ]; then npm run start:prod; else npm run start:dev; fi",
+    "start:prod": "export NODE_ENV=production && npm run build && node dist/index.js",
+    "start:dev": "export NODE_ENV=development && nodemon index.dev.js"
   },
   "author": "Jatin Agrawal",
   "license": "ISC",

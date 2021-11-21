@@ -4,4 +4,4 @@ require('@babel/register')({
   extensions: ['.js', '.ts']
 });
 
-require('./index.ts');
+require('./src/index.ts');
