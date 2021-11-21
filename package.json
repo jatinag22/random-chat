@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "husky": "^7.0.0"
   },
   "scripts": {
     "start": "export APP_ENV=development && lerna run start --parallel",
     "test": "lerna run test --parallel",
     "lint": "lerna run lint --parallel",
     "postinstall": "lerna bootstrap",
-    "lint:fix": "lerna run lint:fix --parallel"
+    "lint:fix": "lerna run lint:fix --parallel",
+    "prepare": "husky install"
   },
   "engines": {
     "node": "14.18.1"
