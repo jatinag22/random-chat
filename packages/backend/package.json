@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +10,9 @@
     "build": "babel ./src -d dist --extensions '.ts'",
     "start": "if [ $APP_ENV = \"production\" ]; then npm run start:prod; else npm run start:dev; fi",
     "start:prod": "export NODE_ENV=production && npm run build && node dist/index.js",
-    "start:dev": "export NODE_ENV=development && nodemon index.dev.js"
+    "start:dev": "export NODE_ENV=development && nodemon index.dev.js",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --fix --ext .ts"
   },
   "author": "Jatin Agrawal",
   "license": "ISC",

@@ -26,8 +26,8 @@
     "source.fixAll.stylelint": true
   },
   "eslint.workingDirectories": [
-    "./backend",
-    "./frontend"
+    "./packages/backend",
+    "./packages/frontend"
   ],
   "emmet.includeLanguages": {
     "javascript": "javascriptreact",
