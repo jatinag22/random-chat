@@ -29,6 +29,7 @@ const MenuDrawer = ({ open, onClose, onOpen }: MenuDrawerProps) => {
           open={open}
           onClose={onClose}
           onOpen={onOpen}
+          PaperProps={{ sx: { overflowX: 'hidden', overflow: 'overlay' } }}
         >
           {drawerChildren}
         </SwipeableDrawer>
@@ -37,6 +38,7 @@ const MenuDrawer = ({ open, onClose, onOpen }: MenuDrawerProps) => {
           anchor="left"
           open={open}
           variant="persistent"
+          PaperProps={{ sx: { overflowX: 'hidden', overflow: 'overlay' } }}
         >
           {drawerChildren}
         </Drawer>

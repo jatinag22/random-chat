@@ -1,4 +1,6 @@
-import { createTheme, PaletteMode, useMediaQuery } from '@mui/material';
+import {
+  createTheme, GlobalStyles, PaletteMode, useMediaQuery,
+} from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useEffect, useMemo } from 'react';
 import { BrowserRouter } from 'react-router-dom';
@@ -32,8 +34,17 @@ const App = () => {
     createTheme(getDesignTokens(themeMode))
   ), [themeMode]);
 
+  const scrollbarGlobalStyles = (
+    <GlobalStyles styles={{
+      '*::-webkit-scrollbar-thumb': { backgroundColor: theme.palette.primary.main },
+      '*': { scrollbarColor: `${theme.palette.primary.main} transparent` },
+    }}
+    />
+  );
+
   return (
     <ThemeProvider theme={theme}>
+      {scrollbarGlobalStyles}
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
