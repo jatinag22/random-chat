@@ -20,10 +20,18 @@ const {
   initialState,
   reducers: {
 
-    toggleMenuDrawer: (state, action) => ({
-      ...state,
-      isMenuDrawerOpen: action.payload.open ?? !state.isMenuDrawerOpen,
-    }),
+    toggleMenuDrawer: (state, action) => {
+      const newDrawerOpenState = action.payload.open ?? !state.isMenuDrawerOpen;
+
+      if (action.payload.updateStorage) {
+        localStorage.setItem('drawer', newDrawerOpenState ? 'open' : 'close');
+      }
+
+      return {
+        ...state,
+        isMenuDrawerOpen: newDrawerOpenState,
+      };
+    },
 
     toggleTheme: (state, action) => {
       const newTheme = action.payload.mode ?? state.theme === 'light' ? 'dark' : 'light';

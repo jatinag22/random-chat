@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useMediaQuery, useTheme } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { toggleMenuDrawer } from '../../redux/reducers/actions';
 import Login from '../Login';
@@ -11,6 +12,8 @@ const NavBar = () => {
   const [loginModalType, setLoginModalType] = useState<LoginModalType>('login');
   const { isMenuDrawerOpen } = useAppSelector((state) => state.app);
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const isExtraSmallWidth = useMediaQuery(theme.breakpoints.down('sm'));
 
   const onOpenLoginModal = useCallback((type?: LoginModalType) => {
     setLoginModalType(type || 'login');
@@ -24,8 +27,23 @@ const NavBar = () => {
   const toggleDrawer = useCallback((open) => {
     dispatch(toggleMenuDrawer({
       open,
+      updateStorage: !isExtraSmallWidth,
     }));
-  }, []);
+  }, [isExtraSmallWidth]);
+
+  useEffect(() => {
+    if (isExtraSmallWidth) {
+      dispatch(toggleMenuDrawer({
+        open: false,
+      }));
+    } else {
+      const drawerStateFromStorage = localStorage.getItem('drawer');
+
+      dispatch(toggleMenuDrawer({
+        open: drawerStateFromStorage === 'open',
+      }));
+    }
+  }, [isExtraSmallWidth]);
 
   return (
     <>
