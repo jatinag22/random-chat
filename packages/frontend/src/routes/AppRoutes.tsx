@@ -6,6 +6,7 @@ import { Paper } from '@mui/material';
 import routes from '.';
 import NavBar from '../components/NavBar';
 import { useAppSelector } from '../redux/hooks';
+import { fullMenuDrawerWidth, miniMenuDrawerWidth } from '../constants';
 
 type RenderComponentProps = {
   component: React.ComponentType,
@@ -24,12 +25,14 @@ const Main = styled(Box, { shouldForwardProp: (prop) => prop !== 'open' })<{
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: 0,
-  [theme.breakpoints.up('sm')]: (open && {
+  [theme.breakpoints.up('sm')]: (open ? {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: '250px',
+    marginLeft: `${fullMenuDrawerWidth}px`,
+  } : {
+    marginLeft: `${miniMenuDrawerWidth}px`,
   }),
 }));
 

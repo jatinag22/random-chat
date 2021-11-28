@@ -1,6 +1,9 @@
 import { SwipeableDrawer, Drawer, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { SxProps, Theme } from '@mui/system';
+import {
+  useTheme, styled, CSSObject, Theme,
+} from '@mui/material/styles';
+import { SxProps } from '@mui/system';
+import { fullMenuDrawerWidth, miniMenuDrawerWidth, topBarHeight } from '../../constants';
 import MenuItems from './MenuItems';
 
 type MenuDrawerProps = {
@@ -10,11 +13,44 @@ type MenuDrawerProps = {
 };
 
 const sxProp: SxProps<Theme> = {
-  overflowX: 'hidden',
   overflow: 'overlay',
-  marginTop: '48px',
-  height: 'calc(100% - 48px)',
+  overflowX: 'hidden',
+  marginTop: `${topBarHeight}px`,
+  height: `calc(100% - ${topBarHeight}px)`,
 };
+
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: `${fullMenuDrawerWidth}px`,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  width: `${miniMenuDrawerWidth}px`,
+});
+
+const DesktopDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: `${fullMenuDrawerWidth}px`,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
 
 const MenuDrawer = ({ open, onClose, onOpen }: MenuDrawerProps) => {
   const theme = useTheme();
@@ -33,14 +69,14 @@ const MenuDrawer = ({ open, onClose, onOpen }: MenuDrawerProps) => {
           <MenuItems />
         </SwipeableDrawer>
       ) : (
-        <Drawer
+        <DesktopDrawer
           anchor="left"
           open={open}
-          variant="persistent"
+          variant="permanent"
           PaperProps={{ sx: sxProp }}
         >
           <MenuItems />
-        </Drawer>
+        </DesktopDrawer>
       )}
     </>
   );

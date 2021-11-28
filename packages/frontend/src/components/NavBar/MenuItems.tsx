@@ -6,10 +6,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import DarkModeSwitch from './DarkModeSwitch';
 
 const MenuItems = () => (
-  <Box
-    sx={{ width: 250 }}
-    role="presentation"
-  >
+  <Box role="presentation">
     <List>
       {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
         <ListItem button key={text}>
