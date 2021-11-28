@@ -3,7 +3,7 @@ import {
 } from '@mui/material';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import DarkModeSwitch from './DarkModeSwitch';
+import DarkModeListItem from './DarkModeListItem';
 
 const MenuItems = () => (
   <Box role="presentation">
@@ -19,12 +19,7 @@ const MenuItems = () => (
     </List>
     <Divider />
     <List>
-      <ListItem>
-        <ListItemIcon>
-          <DarkModeSwitch />
-        </ListItemIcon>
-        <ListItemText primary="Dark Mode" />
-      </ListItem>
+      <DarkModeListItem />
     </List>
   </Box>
 );
