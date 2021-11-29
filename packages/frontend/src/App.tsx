@@ -1,5 +1,5 @@
 import {
-  createTheme, GlobalStyles, PaletteMode, useMediaQuery,
+  createTheme, GlobalStyles, PaletteMode, useMediaQuery, ThemeOptions,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useEffect, useMemo } from 'react';
@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { toggleTheme } from './redux/reducers/app';
 import AppRoutes from './routes/AppRoutes';
 
-const getDesignTokens = (mode: PaletteMode) => ({
+const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
   palette: {
     mode,
   },
@@ -38,6 +38,7 @@ const App = () => {
     <GlobalStyles styles={{
       '*::-webkit-scrollbar-thumb': { backgroundColor: theme.palette.primary.main },
       '*': { scrollbarColor: `${theme.palette.primary.main} transparent` },
+      '.MuiTooltip-popper .MuiTooltip-tooltip': { backgroundColor: `${theme.palette.primary.dark}AA` },
     }}
     />
   );
