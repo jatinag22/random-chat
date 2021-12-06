@@ -6,6 +6,9 @@ import App from './App';
 import store from './redux/store';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import SocketIo from './websockets';
+
+SocketIo.initialize();
 
 ReactDOM.render(
   <React.StrictMode>
