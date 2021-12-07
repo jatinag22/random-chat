@@ -18,7 +18,8 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "max-len": [1, 120, 2, { "ignoreComments": true }]
   },
   "ignorePatterns": [
     "/index.dev.js",

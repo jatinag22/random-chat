@@ -26,6 +26,11 @@ const SocketIo = class {
       socket.on('disconnect', (reason) => {
         logger.debug(`Socket instance disconnected: ${socket.id} ${reason}`);
       });
+
+      socket.on('test-event', (message: string) => {
+        logger.debug(`Listening socket: ${socket.id} event: test-event message: ${message}`);
+        socket.emit('test-event', 'test-data');
+      });
     });
   }
 };
