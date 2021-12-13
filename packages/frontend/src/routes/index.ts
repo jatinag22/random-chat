@@ -1,5 +1,6 @@
 import HomePage from '../pages';
-import { HOME, LOGIN } from './paths';
+import ChatPage from '../pages/chat';
+import { HOME, CHAT } from './paths';
 
 const routes = [
   {
@@ -8,8 +9,8 @@ const routes = [
     exact: true,
   },
   {
-    path: LOGIN,
-    component: HomePage,
+    path: CHAT,
+    component: ChatPage,
     exact: true,
   },
 ];
