@@ -5,9 +5,15 @@ const { REACT_APP_SERVER_URL } = process.env;
 const SocketIo = class {
   private static socket: Socket;
 
+  static id: string;
+
   static initialize = () => {
     SocketIo.socket = io(REACT_APP_SERVER_URL as string, {
       transports: ['websocket', 'polling'],
+    });
+
+    SocketIo.socket.on('connect', () => {
+      SocketIo.id = SocketIo.socket.id;
     });
 
     SocketIo.socket.on('test-event', (message: string) => {
@@ -18,6 +24,10 @@ const SocketIo = class {
 
   static emit(event: string, data: any) {
     SocketIo.socket.emit(event, data);
+  }
+
+  static listen(event: string, callback: (...args: any[]) => void) {
+    SocketIo.socket.on(event, callback);
   }
 
   static sendTestMessage(message: string) {

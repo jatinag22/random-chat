@@ -31,6 +31,21 @@ const SocketIo = class {
         logger.debug(`Listening socket: ${socket.id} event: test-event message: ${message}`);
         socket.emit('test-event', 'test-data');
       });
+
+      socket.on('offer', (offer) => {
+        logger.debug(`sending offer from ${socket.id}`);
+        socket.broadcast.emit('offer', { offer, socketId: socket.id });
+      });
+
+      socket.on('answer', ({ answer, socketId }) => {
+        logger.debug(`sending answer from ${socket.id} to ${socketId}`);
+        this.io.to(socketId).emit('answer', { answer, socketId: socket.id });
+      });
+
+      socket.on('new-ice-candidate', ({ candidate, socketId }) => {
+        logger.debug(`sending candidate from ${socket.id} to ${socketId}`);
+        this.io.to(socketId).emit('new-ice-candidate', { candidate, socketId: socket.id });
+      });
     });
   }
 };
