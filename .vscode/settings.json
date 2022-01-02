@@ -17,6 +17,8 @@
   "editor.autoIndent": "full",
   "editor.detectIndentation": false,
   "editor.formatOnSave": false,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
   "javascript.format.insertSpaceAfterConstructor": true,

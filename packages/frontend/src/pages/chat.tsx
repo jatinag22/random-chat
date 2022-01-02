@@ -1,3 +1,5 @@
-const ChatPage = () => <div />;
+import Chat from '../components/Chat';
+
+const ChatPage = () => <Chat />;
 
 export default ChatPage;
