@@ -1,5 +1,6 @@
 import { useTheme } from '@mui/material';
 import Color from 'color';
+import { useRef } from 'react';
 import Controls from './Controls';
 import './styles.css';
 
@@ -13,6 +14,8 @@ const VideoPlayer = ({ videoProps }: VideoPlayerPropsType) => {
     .alpha(theme.palette.mode === 'dark' ? 0.25 : 0.5).rgb()
     .string();
 
+  const videoTopRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="video-player-root">
       <div className="video-main">
@@ -20,9 +23,9 @@ const VideoPlayer = ({ videoProps }: VideoPlayerPropsType) => {
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <video {...videoProps} />
       </div>
-      <div className="video-top" style={{ backgroundColor }}>
+      <div ref={videoTopRef} className="video-top" style={{ backgroundColor }}>
         <div className="video-controls">
-          <Controls backgroundColor={backgroundColor} />
+          <Controls backgroundColor={backgroundColor} videoTopRef={videoTopRef} />
         </div>
       </div>
     </div>

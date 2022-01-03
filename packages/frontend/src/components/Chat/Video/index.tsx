@@ -8,7 +8,7 @@ const VideoChat = () => {
     borderRadius: '4px',
   };
   const backgroundSx = {
-    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.primary.dark,
+    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.primary.main,
   };
 
   return (
