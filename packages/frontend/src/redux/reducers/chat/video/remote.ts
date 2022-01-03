@@ -26,9 +26,11 @@ const {
   actions: {
     setVolume,
     setVisibility,
+    toggleMute,
+    toggleVisibility,
   }, reducer,
 } = createSlice({
-  name: 'remoteVideo',
+  name: 'remoteVideoChat',
   initialState,
   reducers: {
 
@@ -36,7 +38,7 @@ const {
       ...state,
       volume: {
         ...state.volume,
-        ...action.payload.volume,
+        ...action.payload,
       },
     }),
 
@@ -44,7 +46,23 @@ const {
       ...state,
       visibility: {
         ...state.visibility,
-        ...action.payload.visibility,
+        ...action.payload,
+      },
+    }),
+
+    toggleMute: (state) => ({
+      ...state,
+      volume: {
+        ...state.volume,
+        isMute: !state.volume.isMute,
+      },
+    }),
+
+    toggleVisibility: (state) => ({
+      ...state,
+      visibility: {
+        ...state.visibility,
+        isVisible: !state.visibility.isVisible,
       },
     }),
   },
@@ -55,4 +73,6 @@ export default reducer;
 export {
   setVolume,
   setVisibility,
+  toggleMute,
+  toggleVisibility,
 };

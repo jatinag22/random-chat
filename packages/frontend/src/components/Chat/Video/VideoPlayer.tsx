@@ -1,8 +1,8 @@
 import { useTheme } from '@mui/material';
 import Color from 'color';
-import { useRef } from 'react';
 import Controls from './Controls';
 import './styles.css';
+import { useAppSelector } from '../../../redux/hooks';
 
 type VideoPlayerPropsType = {
   videoProps: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>,
@@ -14,7 +14,7 @@ const VideoPlayer = ({ videoProps }: VideoPlayerPropsType) => {
     .alpha(theme.palette.mode === 'dark' ? 0.25 : 0.5).rgb()
     .string();
 
-  const videoTopRef = useRef<HTMLDivElement>(null);
+  const { volume } = useAppSelector((state) => state.remoteVideoChat);
 
   return (
     <div className="video-player-root">
@@ -23,9 +23,9 @@ const VideoPlayer = ({ videoProps }: VideoPlayerPropsType) => {
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <video {...videoProps} />
       </div>
-      <div ref={videoTopRef} className="video-top" style={{ backgroundColor }}>
+      <div className={`video-top${volume.isHovering ? ' right-hover' : ''}`} style={{ backgroundColor }}>
         <div className="video-controls">
-          <Controls backgroundColor={backgroundColor} videoTopRef={videoTopRef} />
+          <Controls backgroundColor={backgroundColor} />
         </div>
       </div>
     </div>
