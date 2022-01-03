@@ -23,12 +23,14 @@ const VideoChat = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <VideoPlayer videoProps={{
+          <VideoPlayer
+            type="remote"
+            videoProps={{
             // src: 'http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4',
-            src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
-            playsInline: true,
-            controls: false,
-          }}
+              src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
+              playsInline: true,
+              controls: false,
+            }}
           />
         </Grid>
         <Grid className="right-section" container direction="column" wrap="nowrap" item sm={4} alignSelf="stretch">
@@ -41,12 +43,14 @@ const VideoChat = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <VideoPlayer videoProps={{
+            <VideoPlayer
+              type="local"
+              videoProps={{
               // src: 'http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4',
-              src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
-              playsInline: true,
-              controls: false,
-            }}
+                src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
+                playsInline: true,
+                controls: false,
+              }}
             />
           </Grid>
           <Grid item sm={6} sx={borderSx}>

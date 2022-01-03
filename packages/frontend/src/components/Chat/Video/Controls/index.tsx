@@ -1,24 +1,14 @@
-import { Stack } from '@mui/material';
+import LocalControls from './LocalControls';
+import RemoteControls from './RemoteControls';
 import './styles.css';
-import VolumeControl from './VolumeControl';
-import VisibilityControl from './VisibilityControl';
-import CameraControl from './CameraControl';
-import MicControl from './MicControl';
 
 type ControlsType = {
+  type: 'remote' | 'local',
   backgroundColor: string,
 };
 
-const Controls = ({ backgroundColor }: ControlsType) => (
-  <div className="controls-root">
-    <Stack direction="row" alignItems="center">
-      <CameraControl />
-      <MicControl />
-      <VisibilityControl />
-      <VolumeControl backgroundColor={backgroundColor} />
-    </Stack>
-
-  </div>
+const Controls = ({ type, backgroundColor }: ControlsType) => (
+  type === 'remote' ? <RemoteControls backgroundColor={backgroundColor} /> : <LocalControls />
 );
 
 export default Controls;
