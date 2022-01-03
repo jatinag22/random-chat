@@ -1,9 +1,9 @@
 import appReducer from './app';
 
-const chatReducers = {
+const appReducers = {
   app: appReducer,
 };
 
-export default chatReducers;
+export default appReducers;
 
 export * from './app';
