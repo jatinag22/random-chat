@@ -16,11 +16,16 @@ const VolumeControl = ({ backgroundColor }: VolumeControlType) => {
     dispatch(setVolume({ isHovering: value }));
   };
 
-  const volumeSliderOnChange = (event: Event, value: number | number[]) => {
+  const volumeSliderOnChange = (event: Event, value: number) => {
+    const isMute = value === 0;
+
     dispatch(setVolume({
       level: value,
-      isMute: value === 0,
+      isMute,
     }));
+
+    localStorage.setItem('remoteVideo.volume.level', value.toString());
+    localStorage.setItem('remoteVideo.volume.isMute', isMute.toString());
   };
 
   const getVolumeIcon = () => {
@@ -62,7 +67,7 @@ const VolumeControl = ({ backgroundColor }: VolumeControlType) => {
           sx={{ height: '100px' }}
           orientation="vertical"
           value={volume.isMute ? 0 : volume.level}
-          onChange={volumeSliderOnChange}
+          onChange={(event, value) => volumeSliderOnChange(event, value as number)}
         />
       </div>
     </>

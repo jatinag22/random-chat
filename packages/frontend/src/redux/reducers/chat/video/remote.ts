@@ -13,8 +13,8 @@ export interface RemoteVideoState {
 
 const initialState: RemoteVideoState = {
   volume: {
-    level: 100,
-    isMute: false,
+    level: Number(localStorage.getItem('remoteVideo.volume.level')) || 100,
+    isMute: localStorage.getItem('remoteVideo.volume.isMute') === 'true',
     isHovering: false,
   },
   visibility: {
@@ -50,13 +50,19 @@ const {
       },
     }),
 
-    toggleMute: (state) => ({
-      ...state,
-      volume: {
-        ...state.volume,
-        isMute: !state.volume.isMute,
-      },
-    }),
+    toggleMute: (state) => {
+      const newIsMute = !state.volume.isMute;
+
+      localStorage.setItem('remoteVideo.volume.isMute', newIsMute.toString());
+
+      return ({
+        ...state,
+        volume: {
+          ...state.volume,
+          isMute: newIsMute,
+        },
+      });
+    },
 
     toggleVisibility: (state) => ({
       ...state,
