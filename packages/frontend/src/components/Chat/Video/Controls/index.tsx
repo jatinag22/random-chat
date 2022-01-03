@@ -1,8 +1,8 @@
 import { RefObject } from 'react';
-import { Visibility } from '@mui/icons-material';
-import { IconButton, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import './styles.css';
 import VolumeControl from './VolumeControl';
+import VisibilityControl from './VisibilityControl';
 
 type ControlsType = {
   backgroundColor: string,
@@ -12,9 +12,7 @@ type ControlsType = {
 const Controls = ({ backgroundColor, videoTopRef }: ControlsType) => (
   <div className="controls-root">
     <Stack direction="row" alignItems="center">
-      <IconButton>
-        <Visibility />
-      </IconButton>
+      <VisibilityControl />
       <VolumeControl backgroundColor={backgroundColor} videoTopRef={videoTopRef} />
     </Stack>
 
