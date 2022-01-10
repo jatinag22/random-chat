@@ -1,18 +1,18 @@
 import { Grid, useTheme } from '@mui/material';
+import Controls from './Controls';
 import VideoPlayer from './VideoPlayer';
 
 const VideoChat = () => {
   const theme = useTheme();
   const borderSx = {
-    border: `4px solid ${theme.palette.primary.dark}`,
-    borderRadius: '4px',
+    borderColor: theme.palette.primary.dark,
   };
   const backgroundSx = {
     backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.primary.main,
   };
 
   return (
-    <div className="video-chat-root">
+    <div className="video-chat-root" style={{ ...borderSx }}>
       <Grid container wrap="nowrap" className="grid-contanier">
         <Grid
           className="remote-video"
@@ -33,7 +33,16 @@ const VideoChat = () => {
             }}
           />
         </Grid>
+        <Controls sx={{ ...borderSx }} />
         <Grid className="right-section" container direction="column" wrap="nowrap" item sm={4} alignSelf="stretch">
+          <Grid
+            className="text-chat"
+            sx={borderSx}
+            item
+            sm={6}
+          >
+            <div>Text Chat</div>
+          </Grid>
           <Grid
             className="local-video"
             sx={{ ...borderSx, ...backgroundSx }}
@@ -52,9 +61,6 @@ const VideoChat = () => {
                 controls: false,
               }}
             />
-          </Grid>
-          <Grid item sm={6} sx={borderSx}>
-            <div>Text Chat</div>
           </Grid>
         </Grid>
       </Grid>

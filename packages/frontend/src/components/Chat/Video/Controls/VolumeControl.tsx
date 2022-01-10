@@ -4,11 +4,7 @@ import { IconButton, Slider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { setVolume, toggleMute } from '../../../../redux/reducers/actions';
 
-type VolumeControlType = {
-  backgroundColor: string,
-};
-
-const VolumeControl = ({ backgroundColor }: VolumeControlType) => {
+const VolumeControl = () => {
   const { volume } = useAppSelector((state) => state.remoteVideoChat);
   const dispatch = useAppDispatch();
 
@@ -57,8 +53,7 @@ const VolumeControl = ({ backgroundColor }: VolumeControlType) => {
         {getVolumeIcon()}
       </IconButton>
       <div
-        className={`volume-slider${!volume.isHovering ? ' hidden' : ''}`}
-        style={{ backgroundColor }}
+        className="volume-slider"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >

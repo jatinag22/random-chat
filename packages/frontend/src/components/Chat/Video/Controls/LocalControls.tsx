@@ -3,12 +3,10 @@ import CameraControl from './CameraControl';
 import MicControl from './MicControl';
 
 const LocalControls = () => (
-  <div className="controls-root">
-    <Stack direction="row" alignItems="center">
-      <CameraControl />
-      <MicControl />
-    </Stack>
-  </div>
+  <Stack alignItems="center">
+    <CameraControl placement="right" />
+    <MicControl placement="right" />
+  </Stack>
 );
 
 export default LocalControls;

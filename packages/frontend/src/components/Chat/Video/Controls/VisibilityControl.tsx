@@ -2,13 +2,18 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { toggleVisibility } from '../../../../redux/reducers/actions';
+import { TooltipPlacementType } from '../../../common/types';
 
-const VisibilityControl = () => {
+type VolumeControlType = {
+  placement?: TooltipPlacementType,
+};
+
+const VisibilityControl = ({ placement }:VolumeControlType) => {
   const { visibility } = useAppSelector((state) => state.remoteVideoChat);
   const dispatch = useAppDispatch();
 
   return (
-    <Tooltip placement="bottom" title={visibility.isVisible ? 'Hide Video' : 'Show Video'}>
+    <Tooltip placement={placement} title={visibility.isVisible ? 'Hide Video' : 'Show Video'}>
       <IconButton onClick={() => dispatch(toggleVisibility())}>
         {visibility.isVisible ? <Visibility /> : <VisibilityOff />}
       </IconButton>
