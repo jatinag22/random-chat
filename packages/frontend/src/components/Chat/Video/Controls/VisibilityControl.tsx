@@ -4,11 +4,11 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { toggleVisibility } from '../../../../redux/reducers/actions';
 import { TooltipPlacementType } from '../../../common/types';
 
-type VolumeControlType = {
+type VisibilityControlType = {
   placement?: TooltipPlacementType,
 };
 
-const VisibilityControl = ({ placement }:VolumeControlType) => {
+const VisibilityControl = ({ placement }: VisibilityControlType) => {
   const { visibility } = useAppSelector((state) => state.remoteVideoChat);
   const dispatch = useAppDispatch();
 

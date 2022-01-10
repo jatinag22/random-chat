@@ -3,7 +3,7 @@ import CameraControl from './CameraControl';
 import MicControl from './MicControl';
 
 const LocalControls = () => (
-  <Stack alignItems="center">
+  <Stack className="remote-controls" alignItems="center" justifyContent="start">
     <CameraControl placement="right" />
     <MicControl placement="right" />
   </Stack>

@@ -3,9 +3,9 @@ import VolumeControl from './VolumeControl';
 import VisibilityControl from './VisibilityControl';
 
 const RemoteControls = () => (
-  <Stack alignItems="center">
+  <Stack className="remote-controls" alignItems="center" justifyContent="end">
     <VisibilityControl placement="left" />
-    <VolumeControl />
+    <VolumeControl placement="left" />
   </Stack>
 );
 

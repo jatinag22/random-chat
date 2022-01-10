@@ -6,9 +6,35 @@
   border-right-style: solid;
 }
 
+.controls-root .remote-controls {
+  height: 100%;
+}
+
+.controls-root .remote-controls .volume-slider {
+  margin: 8px 0 12px 0;
+}
+
 .controls-root .middle-controls {
   border-top-width: 4px;
   border-top-style: solid;
   border-bottom-width: 4px;
   border-bottom-style: solid;
+  height: 100%;
+}
+
+.controls-root .local-controls {
+  height: 100%;
+}
+
+.controls-root .MuiButtonBase-root {
+  border-radius: 0;
+}
+
+.controls-root .MuiButtonBase-root:hover .MuiSvgIcon-root {
+  transform: scale(1.25);
+}
+
+.controls-root .MuiButtonBase-root .MuiTouchRipple-root span {
+  border-radius: 0;
+  overflow: hidden;
 }

@@ -1,10 +1,15 @@
 import { useEffect } from 'react';
 import { VolumeDown, VolumeOff, VolumeUp } from '@mui/icons-material';
-import { IconButton, Slider } from '@mui/material';
+import { IconButton, Slider, Tooltip } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { setVolume, toggleMute } from '../../../../redux/reducers/actions';
+import { TooltipPlacementType } from '../../../common/types';
 
-const VolumeControl = () => {
+type VolumeControlType = {
+  placement?: TooltipPlacementType,
+};
+
+const VolumeControl = ({ placement }: VolumeControlType) => {
   const { volume } = useAppSelector((state) => state.remoteVideoChat);
   const dispatch = useAppDispatch();
 
@@ -45,13 +50,15 @@ const VolumeControl = () => {
 
   return (
     <>
-      <IconButton
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-        onClick={() => dispatch(toggleMute())}
-      >
-        {getVolumeIcon()}
-      </IconButton>
+      <Tooltip placement={placement} title={volume.isMute ? 'Unmute' : 'Mute'}>
+        <IconButton
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+          onClick={() => dispatch(toggleMute())}
+        >
+          {getVolumeIcon()}
+        </IconButton>
+      </Tooltip>
       <div
         className="volume-slider"
         onMouseEnter={() => setIsHovering(true)}
