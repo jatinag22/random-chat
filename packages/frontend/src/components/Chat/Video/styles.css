@@ -35,6 +35,20 @@
   position: relative;
 }
 
+.remote-video .video-player-root .video-main video.video-blur {
+  filter: blur(30px);
+  transition: filter 500ms;
+}
+
+.remote-video .video-player-root .video-main video.video-no-blur {
+  filter: blur(0px);
+  transition: filter 500ms;
+}
+
+.remote-video .video-player-root .video-main {
+  overflow: hidden;
+}
+
 .video-player-root .video-top {
   position: absolute;
   top: 4px;

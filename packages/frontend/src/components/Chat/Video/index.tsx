@@ -1,4 +1,5 @@
 import { Grid, useTheme } from '@mui/material';
+import { useAppSelector } from '../../../redux/hooks';
 import Controls from './Controls';
 import VideoPlayer from './VideoPlayer';
 
@@ -10,6 +11,8 @@ const VideoChat = () => {
   const backgroundSx = {
     backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.primary.main,
   };
+
+  const { visibility } = useAppSelector((state) => state.remoteVideoChat);
 
   return (
     <div className="video-chat-root" style={{ ...borderSx }}>
@@ -30,6 +33,7 @@ const VideoChat = () => {
               src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
               playsInline: true,
               controls: false,
+              className: visibility.isVisible ? 'video-no-blur' : 'video-blur',
             }}
           />
         </Grid>
