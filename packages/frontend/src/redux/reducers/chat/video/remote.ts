@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Request } from '../../constants';
+import type { RequestType } from '../../types';
 
 export interface RemoteVideoState {
+  request: RequestType,
   volume: {
     level: number,
     isMute: boolean,
@@ -12,6 +15,7 @@ export interface RemoteVideoState {
 }
 
 const initialState: RemoteVideoState = {
+  request: null,
   volume: {
     level: Number(localStorage.getItem('remoteVideo.volume.level')) || 100,
     isMute: localStorage.getItem('remoteVideo.volume.isMute') === 'true',
@@ -28,6 +32,7 @@ const {
     setVisibility,
     toggleMute,
     toggleVisibility,
+    remoteVideoReuestStart,
   }, reducer,
 } = createSlice({
   name: 'remoteVideoChat',
@@ -71,6 +76,11 @@ const {
         isVisible: !state.visibility.isVisible,
       },
     }),
+
+    remoteVideoReuestStart: (state) => ({
+      ...state,
+      request: Request.LOADING,
+    }),
   },
 });
 
@@ -81,4 +91,5 @@ export {
   setVisibility,
   toggleMute,
   toggleVisibility,
+  remoteVideoReuestStart,
 };
