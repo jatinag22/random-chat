@@ -1,7 +1,7 @@
-import videoWatchers from './video';
+import chatConnectionWatcher from './connection';
 
 const chatWatchers = [
-  ...videoWatchers,
+  chatConnectionWatcher,
 ];
 
 export default chatWatchers;
