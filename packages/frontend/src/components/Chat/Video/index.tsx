@@ -1,5 +1,8 @@
 import { Grid, useTheme } from '@mui/material';
-import { useAppSelector } from '../../../redux/hooks';
+import { useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { setLocalMedia } from '../../../redux/reducers/chat';
+import { getUserMedia, stopVideoStreamTracks } from '../../../utils';
 import Controls from './Controls';
 import VideoPlayer from './VideoPlayer';
 
@@ -13,6 +16,38 @@ const VideoChat = () => {
   };
 
   const { visibility } = useAppSelector((state) => state.remoteVideoChat);
+  const { media: localMedia, camera } = useAppSelector((state) => state.localVideoChat);
+
+  const dispatch = useAppDispatch();
+
+  const localVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (camera.isOn) {
+      getUserMedia({ audio: true, video: true })
+        .then((mediaStream) => {
+          dispatch(setLocalMedia({
+            stream: mediaStream,
+          }));
+        })
+        .catch((error) => console.error(error)); // TODO: handle error
+    } else if (localMedia?.stream) {
+      stopVideoStreamTracks(localMedia.stream);
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = null;
+      }
+    }
+  }, [camera]);
+
+  useEffect(() => {
+    if (localVideoRef.current) {
+      if (localMedia?.stream?.getVideoTracks()?.[0]?.readyState === 'ended') {
+        localVideoRef.current.srcObject = null;
+      } else {
+        localVideoRef.current.srcObject = localMedia?.stream;
+      }
+    }
+  }, [localMedia]);
 
   return (
     <div className="video-chat-root" style={{ ...borderSx }}>
@@ -60,7 +95,9 @@ const VideoChat = () => {
               type="local"
               videoProps={{
               // src: 'http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4',
-                src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
+                // src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
+                ref: localVideoRef,
+                autoPlay: true,
                 playsInline: true,
                 controls: false,
               }}

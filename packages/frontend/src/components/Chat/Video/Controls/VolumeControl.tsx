@@ -13,10 +13,6 @@ const VolumeControl = ({ placement }: VolumeControlType) => {
   const { volume } = useAppSelector((state) => state.remoteVideoChat);
   const dispatch = useAppDispatch();
 
-  const setIsHovering = (value: boolean) => {
-    dispatch(setVolume({ isHovering: value }));
-  };
-
   const volumeSliderOnChange = (event: Event, value: number) => {
     const isMute = value === 0;
 
@@ -51,19 +47,11 @@ const VolumeControl = ({ placement }: VolumeControlType) => {
   return (
     <>
       <Tooltip placement={placement} title={volume.isMute ? 'Unmute' : 'Mute'}>
-        <IconButton
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          onClick={() => dispatch(toggleMute())}
-        >
+        <IconButton onClick={() => dispatch(toggleMute())}>
           {getVolumeIcon()}
         </IconButton>
       </Tooltip>
-      <div
-        className="volume-slider"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
+      <div className="volume-slider">
         <Slider
           aria-label="Volume"
           sx={{ height: '100px' }}

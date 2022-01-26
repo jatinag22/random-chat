@@ -2,10 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface LocalVideoState {
   camera: {
-    isOn: boolean;
+    isOn: boolean,
   },
   mic: {
-    isOn: boolean
+    isOn: boolean,
+  },
+  media: {
+    stream: MediaStream | null,
   }
 }
 
@@ -16,6 +19,9 @@ const initialState: LocalVideoState = {
   mic: {
     isOn: true,
   },
+  media: {
+    stream: null,
+  },
 };
 
 const {
@@ -24,6 +30,7 @@ const {
     setMic,
     toggleCamera,
     toggleMic,
+    setLocalMedia,
   }, reducer,
 } = createSlice({
   name: 'localVideoChat',
@@ -61,6 +68,15 @@ const {
         isOn: !state.mic.isOn,
       },
     }),
+
+    setLocalMedia: (state, action) => ({
+      ...state,
+      media: {
+        ...state.media,
+        ...action.payload,
+      },
+    }),
+
   },
 });
 
@@ -71,4 +87,5 @@ export {
   setMic,
   toggleCamera,
   toggleMic,
+  setLocalMedia,
 };

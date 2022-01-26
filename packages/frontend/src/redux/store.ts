@@ -9,6 +9,7 @@ const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     thunk: false,
+    serializableCheck: false,
   }).concat(sagaMiddleware),
 });
 

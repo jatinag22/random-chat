@@ -34,6 +34,16 @@ export const insertMediaCapture = async ({ stream, element }: { stream: MediaStr
 export const getStreamTracks = (stream: MediaStream) => stream.getTracks();
 
 /**
+ * Returns a sequence of MediaStreamTrack objects representing the video tracks in this stream.
+ */
+export const getVideoStreamTracks = (stream: MediaStream) => stream.getVideoTracks();
+
+/**
+ * a sequence of MediaStreamTrack objects representing the audio tracks in this stream.
+ */
+export const getAudioStreamTracks = (stream: MediaStream) => stream.getAudioTracks();
+
+/**
  * Returns a MediaStreamTrack object representing the track with the specified ID string. If there is no track with the specified ID, this method returns null.
  */
 export const getStreamTrackById = ({ stream, id }: { stream: MediaStream, id: string }) => stream.getTrackById(id);
@@ -44,3 +54,24 @@ export const getStreamTrackById = ({ stream, id }: { stream: MediaStream, id: st
  * Access to particular devices is gated by the Permissions API. The list of returned devices will omit any devices for which the corresponding permission has not been granted, including: microphone, camera, speaker-selection (for output devices), and so on.
  */
 export const getAllMediaDevices = () => navigator.mediaDevices.enumerateDevices();
+
+/**
+ * Stops all the tracks.
+ */
+export const stopStreamTracks = (stream: MediaStream) => (
+  getStreamTracks(stream).forEach((track) => track.stop())
+);
+
+/**
+ * Stops the video tracks.
+ */
+export const stopVideoStreamTracks = (stream: MediaStream) => (
+  getVideoStreamTracks(stream).forEach((track) => track.stop())
+);
+
+/**
+ * Stops the audio tracks.
+ */
+export const stopAudioStreamTracks = (stream: MediaStream) => (
+  getAudioStreamTracks(stream).forEach((track) => track.stop())
+);
