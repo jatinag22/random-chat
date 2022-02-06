@@ -1,8 +1,11 @@
 import { Grid, useTheme } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { setLocalMedia } from '../../../redux/reducers/chat';
-import { getUserMedia, stopVideoStreamTracks } from '../../../utils';
+import { chatConnectionReqestStart, setLocalMedia, setRemoteConnection } from '../../../redux/reducers/chat';
+import { Request } from '../../../redux/reducers/constants';
+import {
+  getUserMedia, stopVideoStreamTracks, makeCall, getStreamTracks,
+} from '../../../utils';
 import Controls from './Controls';
 import VideoPlayer from './VideoPlayer';
 
@@ -17,14 +20,19 @@ const VideoChat = () => {
 
   const { visibility } = useAppSelector((state) => state.remoteVideoChat);
   const { media: localMedia, camera } = useAppSelector((state) => state.localVideoChat);
+  const { request, remote } = useAppSelector((state) => state.chatConnection);
 
   const dispatch = useAppDispatch();
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (camera.isOn) {
-      getUserMedia({ audio: true, video: true })
+      getUserMedia({
+        audio: true,
+        video: true,
+      })
         .then((mediaStream) => {
           dispatch(setLocalMedia({
             stream: mediaStream,
@@ -49,6 +57,31 @@ const VideoChat = () => {
     }
   }, [localMedia]);
 
+  const getRemoteSocketId = () => remote.socketId as string;
+
+  useEffect(() => {
+    dispatch(chatConnectionReqestStart({ type: 'video' }));
+  }, []);
+
+  useEffect(() => {
+    if (request.status === Request.SUCCESS && remote.socketId && localMedia?.stream && remoteVideoRef?.current) {
+      makeCall({
+        configuration: undefined,
+        stream: localMedia.stream,
+        tracks: getStreamTracks(localMedia.stream),
+        remoteVideoElement: remoteVideoRef.current,
+        remoteSocketId: remote.socketId as string,
+        getRemoteSocketId,
+        setRemoteSocketId: (id) => dispatch(setRemoteConnection({ socketId: id })),
+        callbackAfterSendingOffer: () => {},
+        callbackAfterReceivingOffer: () => {},
+        callbackAfterSendingAnswer: () => {},
+        callbackAfterReceivingAnswer: () => {},
+        callbackAfterConnectingToRemotePeer: () => {},
+      });
+    }
+  }, [localMedia, remote.socketId, request]);
+
   return (
     <div className="video-chat-root" style={{ ...borderSx }}>
       <Grid container wrap="nowrap" className="grid-contanier">
@@ -64,8 +97,8 @@ const VideoChat = () => {
           <VideoPlayer
             type="remote"
             videoProps={{
-            // src: 'http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4',
-              src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
+              ref: remoteVideoRef,
+              autoPlay: true,
               playsInline: true,
               controls: false,
               className: visibility.isVisible ? 'video-no-blur' : 'video-blur',
@@ -94,12 +127,11 @@ const VideoChat = () => {
             <VideoPlayer
               type="local"
               videoProps={{
-              // src: 'http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4',
-                // src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4',
                 ref: localVideoRef,
                 autoPlay: true,
                 playsInline: true,
                 controls: false,
+                muted: true,
               }}
             />
           </Grid>

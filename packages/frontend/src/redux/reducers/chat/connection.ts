@@ -3,7 +3,10 @@ import { Request } from '../constants';
 import type { RequestType } from '../types';
 
 export interface ConnectionState {
-  request: RequestType,
+  request: {
+    status: RequestType,
+    message: string | null,
+  },
   type: 'text' | 'audio' | 'video' | null,
   status: 'waiting' | 'not found' | 'connected' | null,
   remote: {
@@ -15,7 +18,10 @@ export interface ConnectionState {
 }
 
 const initialState: ConnectionState = {
-  request: null,
+  request: {
+    status: null,
+    message: null,
+  },
   type: null,
   status: null,
   remote: {
@@ -31,25 +37,39 @@ const {
     chatConnectionReqestStart,
     chatConnectionReqestSuccess,
     chatConnectionReqestError,
+    setRemoteConnection,
   }, reducer,
 } = createSlice({
   name: 'chatConnection',
   initialState,
   reducers: {
 
-    chatConnectionReqestStart: (state) => ({
+    chatConnectionReqestStart: (state, action) => ({
       ...state,
-      request: Request.LOADING,
+      request: { status: Request.LOADING, message: null },
+      type: action.payload.type,
     }),
 
-    chatConnectionReqestSuccess: (state) => ({
+    chatConnectionReqestSuccess: (state, action) => ({
       ...state,
-      request: Request.SUCCESS,
+      request: { status: Request.SUCCESS, message: null },
+      remote: {
+        ...state.remote,
+        socketId: action.payload.socketId,
+      },
     }),
 
-    chatConnectionReqestError: (state) => ({
+    chatConnectionReqestError: (state, action) => ({
       ...state,
-      request: Request.ERROR,
+      request: { status: Request.ERROR, message: action.payload.error },
+    }),
+
+    setRemoteConnection: (state, action) => ({
+      ...state,
+      remote: {
+        ...state.remote,
+        ...action.payload,
+      },
     }),
 
   },
@@ -61,4 +81,5 @@ export {
   chatConnectionReqestStart,
   chatConnectionReqestSuccess,
   chatConnectionReqestError,
+  setRemoteConnection,
 };

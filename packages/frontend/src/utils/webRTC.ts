@@ -5,6 +5,7 @@ type MakeCallParametersType = {
   stream: MediaStream,
   tracks: MediaStreamTrack[],
   remoteVideoElement: HTMLVideoElement,
+  remoteSocketId: string,
   getRemoteSocketId: () => string,
   setRemoteSocketId: (id: string) => void,
   callbackAfterSendingOffer: (...args: any) => void,
@@ -38,12 +39,12 @@ const addAnswerListener = (
 };
 
 const createAndSendOffer = async (
-  { peerConnection, callback }:
-  { peerConnection: RTCPeerConnection, callback: () => void },
+  { socketId, peerConnection, callback }:
+  { socketId: string, peerConnection: RTCPeerConnection, callback: () => void },
 ) => {
   const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
-  SocketIo.emit('offer', offer);
+  SocketIo.emit('offer', { offer, socketId });
   callback();
 };
 
@@ -128,6 +129,7 @@ export const makeCall = async ({
   stream,
   tracks,
   remoteVideoElement,
+  remoteSocketId,
   getRemoteSocketId,
   setRemoteSocketId,
   callbackAfterSendingOffer,
@@ -163,7 +165,7 @@ export const makeCall = async ({
   addAnswerListener({ peerConnection, callback: callbackAfterReceivingAnswer, setRemoteSocketId });
 
   // Create offer and send offer to all
-  await createAndSendOffer({ peerConnection, callback: callbackAfterSendingOffer });
+  await createAndSendOffer({ socketId: remoteSocketId, peerConnection, callback: callbackAfterSendingOffer });
 };
 
 export const temp = '';

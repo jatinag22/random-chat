@@ -22,16 +22,20 @@ const SocketIo = class {
     });
   };
 
-  static emit(event: string, data: any) {
-    SocketIo.socket.emit(event, data);
+  static emit(event: string, data: any, callback?: (...args: any[]) => void) {
+    SocketIo.socket.emit(event, data, callback);
   }
 
   static listen(event: string, callback: (...args: any[]) => void) {
     SocketIo.socket.on(event, callback);
   }
 
-  static sendTestMessage(message: string) {
-    SocketIo.emit('test-event', message || 'test-data');
+  static listenOnce(event: string, callback: (...args: any[]) => void) {
+    SocketIo.socket.on(event, callback);
+  }
+
+  static sendTestMessage(message: string, callback?: (...args: any[]) => void) {
+    SocketIo.emit('test-event', message || 'test-data', callback);
   }
 };
 
